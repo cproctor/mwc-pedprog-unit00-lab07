@@ -119,7 +119,7 @@ animations with very little code. Here’s an example:</p>
 <p>The examples above show how <cite>animate</cite> provides interpolation, smoothly changing the size, rotation, or other
 properties. But what if you don’t want a smooth transition with a constant rate of change? Easing functions
 specify different rates of change, and can be imported from <a class="reference internal" href="easing.html#easing"><span class="std std-ref">Easing</span></a>. Here’s an example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">easing_functions.easing</span> <span class="kn">import</span> <span class="n">EaseOutBounce</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">easing_functions.easing</span> <span class="kn">import</span> <span class="n">easeOutBounce</span>
 
 <span class="k">def</span> <span class="nf">rect</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
@@ -129,8 +129,8 @@ specify different rates of change, and can be imported from <a class="reference 
         <span class="n">right</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">animate</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">frame</span><span class="o">.</span><span class="n">translate</span><span class="p">([</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">easing</span><span class="o">=</span><span class="n">BounceEaseOut</span><span class="p">):</span>
-        <span class="n">width</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">easing</span><span class="o">=</span><span class="n">BounceEaseOut</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">frame</span><span class="o">.</span><span class="n">translate</span><span class="p">([</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">easing</span><span class="o">=</span><span class="n">easeOutBounce</span><span class="p">):</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">easing</span><span class="o">=</span><span class="n">easeOutBounce</span><span class="p">)</span>
         <span class="n">rect</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 </pre></div>
 </div>
