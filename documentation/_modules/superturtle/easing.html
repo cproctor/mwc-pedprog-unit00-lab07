@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>superturtle.easing &#8212; Superturtle 0.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for superturtle.easing</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Adapted from https://github.com/semitable/easing-functions</span>
+<span class="c1"># synchronized names with Penner and added docstrings</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="k">class</span> <span class="nc">EasingBase</span><span class="p">:</span>
+    <span class="n">limit</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">ease</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">alpha</span>
+        <span class="n">t</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ease</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+
+<div class="viewcode-block" id="linear"><a class="viewcode-back" href="../../easing.html#superturtle.easing.linear">[docs]</a><span class="k">class</span> <span class="nc">linear</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="linear.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.linear.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">t</span></div></div>
+
+<div class="viewcode-block" id="easeInQuad"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInQuad">[docs]</a><span class="k">class</span> <span class="nc">easeInQuad</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInQuad.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInQuad.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span></div></div>
+
+<div class="viewcode-block" id="easeOutQuad"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutQuad">[docs]</a><span class="k">class</span> <span class="nc">easeOutQuad</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutQuad.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutQuad.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="easeInOutQuad"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutQuad">[docs]</a><span class="k">class</span> <span class="nc">easeInOutQuad</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutQuad.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutQuad.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInCubic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInCubic">[docs]</a><span class="k">class</span> <span class="nc">easeInCubic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInCubic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInCubic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span></div></div>
+
+<div class="viewcode-block" id="easeOutCubic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutCubic">[docs]</a><span class="k">class</span> <span class="nc">easeOutCubic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutCubic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutCubic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInOutCubic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutCubic">[docs]</a><span class="k">class</span> <span class="nc">easeInOutCubic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutCubic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutCubic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInQuartic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInQuartic">[docs]</a><span class="k">class</span> <span class="nc">easeInQuartic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInQuartic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInQuartic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span></div></div>
+
+<div class="viewcode-block" id="easeOutQuartic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutQuartic">[docs]</a><span class="k">class</span> <span class="nc">easeOutQuartic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutQuartic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutQuartic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInOutQuartic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutQuartic">[docs]</a><span class="k">class</span> <span class="nc">easeInOutQuartic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutQuartic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutQuartic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">8</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInQuintic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInQuintic">[docs]</a><span class="k">class</span> <span class="nc">easeInQuintic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInQuintic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInQuintic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span></div></div>
+
+<div class="viewcode-block" id="easeOutQuintic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutQuintic">[docs]</a><span class="k">class</span> <span class="nc">easeOutQuintic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutQuintic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutQuintic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInOutQuintic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutQuintic">[docs]</a><span class="k">class</span> <span class="nc">easeInOutQuintic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutQuintic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutQuintic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">16</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInSine"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInSine">[docs]</a><span class="k">class</span> <span class="nc">easeInSine</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInSine.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInSine.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeOutSine"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutSine">[docs]</a><span class="k">class</span> <span class="nc">easeOutSine</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutSine.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutSine.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="easeInOutSine"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutSine">[docs]</a><span class="k">class</span> <span class="nc">easeInOutSine</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutSine.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutSine.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="easeInCirc"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInCirc">[docs]</a><span class="k">class</span> <span class="nc">easeInCirc</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInCirc.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInCirc.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="easeOutCirc"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutCirc">[docs]</a><span class="k">class</span> <span class="nc">easeOutCirc</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutCirc.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutCirc.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="easeInOutCirc"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutCirc">[docs]</a><span class="k">class</span> <span class="nc">easeInOutCirc</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutCirc.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutCirc.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">t</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="easeInExpo"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInExpo">[docs]</a><span class="k">class</span> <span class="nc">easeInExpo</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInExpo.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInExpo.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="easeOutExpo"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutExpo">[docs]</a><span class="k">class</span> <span class="nc">easeOutExpo</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutExpo.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutExpo.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="easeInOutExpo"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutExpo">[docs]</a><span class="k">class</span> <span class="nc">easeInOutExpo</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutExpo.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutExpo.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">t</span>
+
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="mi">20</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInElastic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInElastic">[docs]</a><span class="k">class</span> <span class="nc">easeInElastic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInElastic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInElastic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">13</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="easeOutElastic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutElastic">[docs]</a><span class="k">class</span> <span class="nc">easeOutElastic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutElastic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutElastic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="o">-</span><span class="mi">13</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div></div>
+
+<div class="viewcode-block" id="easeInOutElastic"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutElastic">[docs]</a><span class="k">class</span> <span class="nc">easeInOutElastic</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutElastic.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutElastic.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="mf">0.5</span>
+                <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">13</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">))</span>
+                <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="o">-</span><span class="mi">13</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="o">+</span> <span class="mi">2</span>
+        <span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="easeInBack"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInBack">[docs]</a><span class="k">class</span> <span class="nc">easeInBack</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInBack.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInBack.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">-</span> <span class="n">t</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="easeOutBack"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutBack">[docs]</a><span class="k">class</span> <span class="nc">easeOutBack</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutBack.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutBack.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">-</span> <span class="n">p</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span></div></div>
+
+<div class="viewcode-block" id="easeInOutBack"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutBack">[docs]</a><span class="k">class</span> <span class="nc">easeInOutBack</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutBack.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutBack.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t</span>
+            <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">-</span> <span class="n">p</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">*</span> <span class="n">p</span> <span class="o">-</span> <span class="n">p</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span> <span class="o">+</span> <span class="mf">0.5</span></div></div>
+
+<div class="viewcode-block" id="easeInBounce"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInBounce">[docs]</a><span class="k">class</span> <span class="nc">easeInBounce</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInBounce.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInBounce.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">BounceEaseOut</span><span class="p">()</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="easeOutBounce"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutBounce">[docs]</a><span class="k">class</span> <span class="nc">easeOutBounce</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeOutBounce.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeOutBounce.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">11</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">121</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="mi">16</span>
+        <span class="k">elif</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">8</span> <span class="o">/</span> <span class="mi">11</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">363</span> <span class="o">/</span> <span class="mf">40.0</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">99</span> <span class="o">/</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">17</span> <span class="o">/</span> <span class="mf">5.0</span>
+        <span class="k">elif</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">9</span> <span class="o">/</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">4356</span> <span class="o">/</span> <span class="mf">361.0</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">35442</span> <span class="o">/</span> <span class="mf">1805.0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">16061</span> <span class="o">/</span> <span class="mf">1805.0</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">54</span> <span class="o">/</span> <span class="mf">5.0</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">513</span> <span class="o">/</span> <span class="mf">25.0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">268</span> <span class="o">/</span> <span class="mf">25.0</span></div></div>
+
+<div class="viewcode-block" id="easeInOutBounce"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutBounce">[docs]</a><span class="k">class</span> <span class="nc">easeInOutBounce</span><span class="p">(</span><span class="n">EasingBase</span><span class="p">):</span>
+<div class="viewcode-block" id="easeInOutBounce.func"><a class="viewcode-back" href="../../easing.html#superturtle.easing.easeInOutBounce.func">[docs]</a>    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">BounceEaseIn</span><span class="p">()</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">BounceEaseOut</span><span class="p">()</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Superturtle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Chris Proctor.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

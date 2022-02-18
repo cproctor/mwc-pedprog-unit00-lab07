@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction &#8212; Superturtle 0.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Superturtle" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="introduction">
+<span id="id1"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p><cite>Superturtle</cite> provides extensions to Python’s built-in turtle package which support
+richer drawing and animation. This package also provides opportunities to practice
+importing functions and working with code blocks.</p>
+<section id="context-managers-control-how-the-turtle-draws">
+<h2>Context managers control how the turtle draws<a class="headerlink" href="#context-managers-control-how-the-turtle-draws" title="Permalink to this headline">¶</a></h2>
+<p>One important concept used throughout this package is the <cite>context manager</cite>. Just like
+a loop, a conditional, or a function declaration, a context manager introduces an
+indented code block. While a loop changes how many times a code block runs, a conditional
+changes whether the code block runs, and a function assigns a name to a code block,
+the context manager changes how the code block runs. In the example below, we
+use the <cite>dots</cite> context manager to cause the turtle to draw with a dotted line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">superturtle.stroke</span> <span class="kn">import</span> <span class="n">dots</span>
+<span class="kn">from</span> <span class="nn">turtle</span> <span class="kn">import</span> <span class="n">forward</span><span class="p">,</span> <span class="n">pensize</span>
+
+<span class="n">pensize</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">dots</span><span class="p">():</span>
+    <span class="n">forward</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/context_manager.png" src="_images/context_manager.png" />
+<p>The <a class="reference internal" href="stroke.html#stroke"><span class="std std-ref">Stroke</span></a> module contains several other context managers which similarly alter
+how the turtle draws, for the duration of their code blocks. These context managers accept
+optional arguments. For example, <cite>dots</cite> accepts an integer which controls the spacing between
+dots.</p>
+<p>The <a class="reference internal" href="movement.html#movement"><span class="std std-ref">Movement</span></a> module contains two context managers which affect how the turtle moves.
+<cite>restore_state_when_finished</cite> saves the turtle’s position and heading, runs the code block, and
+then restores the prior state when the code block is complete. <cite>no_delay</cite> causes the code block
+to draw instantly, which is helpful for large complex drawings.</p>
+</section>
+<section id="saving-turtle-drawings">
+<h2>Saving turtle drawings<a class="headerlink" href="#saving-turtle-drawings" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="image.html#image"><span class="std std-ref">Image</span></a> module has a <cite>save</cite> function, which saves the current canvas as an image, using the
+given filename.</p>
+</section>
+<section id="creating-animations">
+<h2>Creating animations<a class="headerlink" href="#creating-animations" title="Permalink to this headline">¶</a></h2>
+<p>The most powerful and complex function in <cite>Superturtle</cite> is <cite>animate</cite>, which allows you to create an
+animated image and to save it as a gif. (If you want to save an animation, pass <cite>animate</cite> the optional
+argument <cite>gif_filename</cite>.)</p>
+<p>Every animation is a sequence of still images (called frames), played at
+a certain speed to create the perception of motion. Usually, you want each frame to differ a bit from
+the previous frame. The most effective way to accomplish this is to use a drawing function which is
+parametrized. That is, the drawing function takes in one or more numbers, and uses those to create
+the drawing. As the numbers change, the drawing changes accordingly. The animate function takes inputs
+describing your desired animation (e.g. the total number of frames in your animation; whether it should loop)
+and yields a sequence of frames. Each frame knows its place in the animation and can provide interpolated
+numbers for your functions. Here’s an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">superturtle.animation</span> <span class="kn">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">turtle</span> <span class="kn">import</span> <span class="n">forward</span><span class="p">,</span> <span class="n">right</span>
+
+<span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">side_length</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">side</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">forward</span><span class="p">(</span><span class="n">side_length</span><span class="p">)</span>
+        <span class="n">right</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">animate</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">square</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/animated_square_0.gif" src="_images/animated_square_0.gif" />
+<p>Frames also provide context managers which interpolate transformations. Within these transformations’
+code blocks, the canvas can be rotated, translated, and scaled. This allows you to create richly-detailed
+animations with very little code. Here’s an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">animate</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">frame</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">):</span>
+        <span class="n">penup</span><span class="p">()</span>
+        <span class="n">forward</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">pendown</span><span class="p">()</span>
+        <span class="n">square</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">frame</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">cycles</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">penup</span><span class="p">()</span>
+            <span class="n">forward</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+            <span class="n">pendown</span><span class="p">()</span>
+            <span class="n">square</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/animated_square_1.gif" src="_images/animated_square_1.gif" />
+</section>
+<section id="easing">
+<h2>Easing<a class="headerlink" href="#easing" title="Permalink to this headline">¶</a></h2>
+<p>The examples above show how <cite>animate</cite> provides interpolation, smoothly changing the size, rotation, or other
+properties. But what if you don’t want a smooth transition with a constant rate of change? Easing functions
+specify different rates of change, and can be imported from <a class="reference internal" href="easing.html#easing"><span class="std std-ref">Easing</span></a>. Here’s an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">easing_functions.easing</span> <span class="kn">import</span> <span class="n">EaseOutBounce</span>
+
+<span class="k">def</span> <span class="nf">rect</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">forward</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="n">right</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+        <span class="n">forward</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+        <span class="n">right</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">animate</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">frame</span><span class="o">.</span><span class="n">translate</span><span class="p">([</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">easing</span><span class="o">=</span><span class="n">BounceEaseOut</span><span class="p">):</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">easing</span><span class="o">=</span><span class="n">BounceEaseOut</span><span class="p">)</span>
+        <span class="n">rect</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/eased_square.gif" src="_images/eased_square.gif" />
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Superturtle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#context-managers-control-how-the-turtle-draws">Context managers control how the turtle draws</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-turtle-drawings">Saving turtle drawings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-animations">Creating animations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#easing">Easing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Superturtle</a></li>
+      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Chris Proctor.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/introduction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
